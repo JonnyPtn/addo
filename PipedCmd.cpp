@@ -10,6 +10,7 @@
 #include <array>
 #include <memory>
 #include <stdio.h>
+#include <iostream>
 
 #define BUFSIZE 4096
 
@@ -37,7 +38,7 @@ int main(int argc, char* argv[])
     {
         hpipe = CreateFile(
             "\\\\.\\pipe\\sudopipe",
-            GENERIC_WRITE, // only need read access
+            GENERIC_WRITE, // only need write access
             FILE_SHARE_READ | FILE_SHARE_WRITE,
             NULL,
             OPEN_EXISTING,
@@ -52,14 +53,14 @@ int main(int argc, char* argv[])
     BOOL bSuccess;
 
         
-    std::array<char, 64> buffer;
+    std::array<char, 128> buffer;
     std::shared_ptr<FILE> pipe(_popen(command.c_str(), "r"), _pclose);
     if (!pipe) throw std::runtime_error("popen() failed!");
     while (!feof(pipe.get()))
     {
-        if (fgets(buffer.data(), 64, pipe.get()) != NULL)
+        if (fgets(buffer.data(), 128, pipe.get()) != NULL)
         {
-
+            std::cout << buffer.data();
             auto  wresult = WriteFile(
                 hpipe, // handle to our outbound pipe
                 buffer.data(), // data to send
