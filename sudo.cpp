@@ -7,7 +7,7 @@
 #include <string>
 #include <locale>
 #include <codecvt>
-
+#include <iostream>
 #define BUFSIZE 128 
 
 int main(int argc, char* argv[])
@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
     //create a named pipe. The shell command we execute with elevated priviledges will write to this
     auto pipe = CreateNamedPipe("\\\\.\\pipe\\sudopipe",
         PIPE_ACCESS_DUPLEX,
-        PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
+        PIPE_READMODE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
         PIPE_UNLIMITED_INSTANCES,
         BUFSIZE,
         BUFSIZE,
@@ -54,12 +54,13 @@ int main(int argc, char* argv[])
     {
         //connect to the pipe
         ConnectNamedPipe(pipe, NULL);
-        DWORD soFar = 0;
         DWORD dwRead, dwWritten;
         CHAR chBuf[BUFSIZE];
         // Read from the pipe until the process ends
+        int status=0;
         do
         {
+            dwRead = 0;
             std::memset(chBuf, 0, BUFSIZE);
 
             //now read from the pipe
@@ -68,10 +69,23 @@ int main(int argc, char* argv[])
                 BUFSIZE, &dwRead, NULL);
             if (dwRead>0)
             {
-                printf(chBuf);
-                soFar += dwRead;
+                std::cout << chBuf;
             }
-        } while (WaitForSingleObject(shExInfo.hProcess, 0) == WAIT_TIMEOUT);
+            auto status = WaitForSingleObject(shExInfo.hProcess, 0);
+        } while (status == WAIT_TIMEOUT);
+
+        //read the pipe until there's nothing left
+        do
+        {
+            dwRead = 0;
+            ReadFile(pipe,
+                chBuf,
+                BUFSIZE, &dwRead, NULL);
+            if (dwRead>0)
+            {
+                std::cout << chBuf;
+            }
+        } while (dwRead > 0);
     }
     return 0;
 }

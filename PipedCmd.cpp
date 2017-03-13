@@ -60,8 +60,6 @@ int main(int argc, char* argv[])
         if (fgets(buffer.data(), 64, pipe.get()) != NULL)
         {
 
-            printf(buffer.data());
-
             auto  wresult = WriteFile(
                 hpipe, // handle to our outbound pipe
                 buffer.data(), // data to send
