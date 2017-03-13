@@ -1,64 +1,34 @@
-#include <windows.h>
-#include <stdio.h>
-#include <cstdio>
-#include <iostream>
-#include <memory>
-#include <stdexcept>
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \file   PipedCmd.cpp.
+///
+/// \brief  This is the process which runs with elevated priviledges.
+///         Basically just executes the command and pipes the output back to the sudo process
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#include <Windows.h>
 #include <string>
 #include <array>
+#include <memory>
+#include <stdio.h>
 
 #define BUFSIZE 4096
 
-std::string exec(const char* cmd) {
-    std::array<char, 128> buffer;
-    std::string result;
-    std::shared_ptr<FILE> pipe(_popen(cmd, "r"), _pclose);
-    if (!pipe) throw std::runtime_error("popen() failed!");
-    while (!feof(pipe.get())) {
-        if (fgets(buffer.data(), 128, pipe.get()) != NULL)
-            result += buffer.data();
-    }
-    return result;
-}
-
 int main(int argc, char* argv[])
 {
-    //parse input
+    //parse the command first
     std::string command = "cmd /c";
     for (int i = 1; i < argc; i++)
     {
         std::string arg(argv[i]);
         if (arg.find(" ") != std::string::npos)
         {
+            //parameter has white space, wrap in speech marks
             arg.insert(arg.begin(), '"');
             arg.append("\"");
         }
         command.append(arg);
         command.append(" ");
     }
-
-    DWORD dwRead, dwWritten;
-    HANDLE hStdin, hStdout;
-    BOOL bSuccess;
-
-    hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-    hStdin = GetStdHandle(STD_INPUT_HANDLE);
-    if (
-        (hStdout == INVALID_HANDLE_VALUE) ||
-        (hStdin == INVALID_HANDLE_VALUE)
-        )
-        ExitProcess(1);
-        
-    std::array<char, 128> buffer;
-    std::string result;
-    std::shared_ptr<FILE> pipe(_popen(command.c_str(), "r"), _pclose);
-    if (!pipe) throw std::runtime_error("popen() failed!");
-    while (!feof(pipe.get())) {
-        if (fgets(buffer.data(), 128, pipe.get()) != NULL)
-            result += buffer.data();
-    }
-
-    //bSuccess = WriteFile(hStdout, result.data(), result.length(), &dwWritten, NULL);
 
     // Open the named pipe
     // Most of these parameters aren't very relevant for pipes.
@@ -76,18 +46,30 @@ int main(int argc, char* argv[])
         );
 
     } while (hpipe == INVALID_HANDLE_VALUE);
- 
-    auto  wresult = WriteFile(
-        hpipe, // handle to our outbound pipe
-        result.data() , // data to send
-        result.length(), // length of data to send (bytes)
-        &dwWritten, // will store actual amount of data sent
-        NULL // not using overlapped IO
-    );
 
-    if (!wresult) {
-        // look up error code here using GetLastError()
-        // system("pause");
+    DWORD dwRead, dwWritten;
+    HANDLE hStdin, hStdout;
+    BOOL bSuccess;
+
+        
+    std::array<char, 64> buffer;
+    std::shared_ptr<FILE> pipe(_popen(command.c_str(), "r"), _pclose);
+    if (!pipe) throw std::runtime_error("popen() failed!");
+    while (!feof(pipe.get()))
+    {
+        if (fgets(buffer.data(), 64, pipe.get()) != NULL)
+        {
+
+            printf(buffer.data());
+
+            auto  wresult = WriteFile(
+                hpipe, // handle to our outbound pipe
+                buffer.data(), // data to send
+                buffer.size(), // length of data to send (bytes)
+                &dwWritten, // will store actual amount of data sent
+                NULL // not using overlapped IO
+            );
+        }
     }
     return 0;
 }
