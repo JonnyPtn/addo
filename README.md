@@ -9,9 +9,14 @@ This is still experimental, so don't expect a bug free experience, and I welcome
 ## Compiling
 The project uses cmake, so to build just make sure you have cmake and an msbuild version installed(I've tested with vs2015 and 2017).
 
-Generate the project files using cmake then build the install target
+Generate the project files using cmake then build the generated project
+
+## Installing
+Build the "INSTALL" project in visual studio
 
 If you use the command line and want to place the files somewhere requiring administrator permissions check out my sudo program [here](https://github.com/JonnyPtn/sudo/)
 
 command line install (presuming you have sudo installed)
-`cmake .` followed by `msbuild install.vcxproj`
+`cmake .` followed by `msbuild`
+
+Once installed, add the bin location to your PATH environment variable so you can call sudo from anywhere
