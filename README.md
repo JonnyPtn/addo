@@ -7,6 +7,11 @@ UAC is still required, unfortunately. Example of it in action [here](https://www
 This is still experimental, so don't expect a bug free experience, and I welcome any feedback.
 
 ## Compiling
-Compile the two source files into two executables using the compiler of your choice, then place the sudo executable somewhere in your PATH environment variable, and put pipedcmd.exe in "C:/sudo" folder (I haven't established a better method for installation yet... open to suggestions)
+The project uses cmake, so to build just make sure you have cmake and an msbuild version installed(I've tested with vs2015 and 2017).
+
+Generate the project files using cmake then build the install target
 
 If you use the command line and want to place the files somewhere requiring administrator permissions check out my sudo program [here](https://github.com/JonnyPtn/sudo/)
+
+command line install (presuming you have sudo installed)
+`cmake .` followed by `msbuild install.vcxproj`
