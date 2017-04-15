@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "addo", "addo\addo.vcxproj", "{0C85D03D-88CF-4841-9C8F-D455E9A88BDC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "namedpipecmd", "namedpipecmd\namedpipecmd.vcxproj", "{1C3C5787-3C05-44D4-88E1-85B6BE72C5AC}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -23,14 +21,6 @@ Global
 		{0C85D03D-88CF-4841-9C8F-D455E9A88BDC}.Release|x64.Build.0 = Release|x64
 		{0C85D03D-88CF-4841-9C8F-D455E9A88BDC}.Release|x86.ActiveCfg = Release|Win32
 		{0C85D03D-88CF-4841-9C8F-D455E9A88BDC}.Release|x86.Build.0 = Release|Win32
-		{1C3C5787-3C05-44D4-88E1-85B6BE72C5AC}.Debug|x64.ActiveCfg = Debug|x64
-		{1C3C5787-3C05-44D4-88E1-85B6BE72C5AC}.Debug|x64.Build.0 = Debug|x64
-		{1C3C5787-3C05-44D4-88E1-85B6BE72C5AC}.Debug|x86.ActiveCfg = Debug|Win32
-		{1C3C5787-3C05-44D4-88E1-85B6BE72C5AC}.Debug|x86.Build.0 = Debug|Win32
-		{1C3C5787-3C05-44D4-88E1-85B6BE72C5AC}.Release|x64.ActiveCfg = Release|x64
-		{1C3C5787-3C05-44D4-88E1-85B6BE72C5AC}.Release|x64.Build.0 = Release|x64
-		{1C3C5787-3C05-44D4-88E1-85B6BE72C5AC}.Release|x86.ActiveCfg = Release|Win32
-		{1C3C5787-3C05-44D4-88E1-85B6BE72C5AC}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
