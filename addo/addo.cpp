@@ -45,7 +45,7 @@ int runpiped(int argc, wchar_t* argv[])
 	do
 	{
 		hpipe = CreateFile(
-			L"\\\\.\\pipe\\sudopipe",
+			L"\\\\.\\pipe\\addopipe",
 			GENERIC_WRITE, // only need write access
 			FILE_SHARE_READ | FILE_SHARE_WRITE,
 			NULL,
@@ -85,15 +85,22 @@ int runpiped(int argc, wchar_t* argv[])
 
 int wmain(int argc, wchar_t* argv[])
 {
-	//parse input
+	// Make sure we've got something first
+	if (argc <= 1)
+	{
+		std::cout << "Administrator do what?";
+		return 0;
+	}
+
+	// Parse input
 	std::wstring command;
 
-	//If the first parameter is -piped, then we should run piped
+	// If the first parameter is -piped, then we should run piped
 	if (std::wstring(argv[1]) == L"-piped")
 	{
 		return runpiped(argc, argv);
 	}
-	//otherwise, we are the pipee
+	// Otherwise, we are the pipee
 	else
 	{
 		command.append(L"-piped ");
@@ -110,10 +117,10 @@ int wmain(int argc, wchar_t* argv[])
 		command.append(L" ");
 	}
 
-	//create a named pipe. The shell command we execute with elevated priviledges will write to this
-	auto pipe = CreateNamedPipe(L"\\\\.\\pipe\\sudopipe",
+	// Create a named pipe. The shell command we execute with elevated priviledges will write to this
+	auto pipe = CreateNamedPipe(L"\\\\.\\pipe\\addopipe",
 		PIPE_ACCESS_DUPLEX,
-		PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT,
+		PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
 		PIPE_UNLIMITED_INSTANCES,
 		BUFSIZE,
 		BUFSIZE,
@@ -123,21 +130,21 @@ int wmain(int argc, wchar_t* argv[])
 
 	auto path = myPath();
 
-	//shell execute with elevated permissions
+	// Shell execute with elevated permissions
 	SHELLEXECUTEINFO shExInfo = { 0 };
 	shExInfo.cbSize = sizeof(shExInfo);
 	shExInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
 	shExInfo.hwnd = 0;
-	shExInfo.lpVerb = L"runas";                // Operation to perform
-	shExInfo.lpFile = path.c_str();       // Application to start
-	shExInfo.lpParameters = command.c_str();                  // Additional parameters
+	shExInfo.lpVerb = L"runas";					// Operation to perform
+	shExInfo.lpFile = path.c_str();				// Application to start
+	shExInfo.lpParameters = command.c_str();	// Additional parameters
 	shExInfo.lpDirectory = 0;
 	shExInfo.nShow = SW_HIDE;
 	shExInfo.hInstApp = 0;
 
 	if (ShellExecuteEx(&shExInfo))
 	{
-		//connect to the pipe
+		// Connect to the pipe
 		ConnectNamedPipe(pipe, NULL);
 		DWORD dwRead;
 		CHAR chBuf[BUFSIZE];
@@ -148,7 +155,7 @@ int wmain(int argc, wchar_t* argv[])
 			dwRead = 0;
 			std::memset(chBuf, 0, BUFSIZE);
 
-			//now read from the pipe
+			// Now read from the pipe
 			ReadFile(pipe,
 				chBuf,
 				BUFSIZE, &dwRead, NULL);
@@ -159,7 +166,7 @@ int wmain(int argc, wchar_t* argv[])
 			auto status = WaitForSingleObject(shExInfo.hProcess, 0);
 		} while (status == WAIT_TIMEOUT);
 
-		//output anything remaining in the pipe
+		// Output anything remaining in the pipe
 		do
 		{
 			std::memset(chBuf, 0, BUFSIZE);
