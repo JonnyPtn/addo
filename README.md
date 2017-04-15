@@ -6,7 +6,7 @@
 
 This is a program for windows which lets you run terminal commands in the current window with elevated permissions.
 
-UAC is still required, Depending on your settings
+UAC is still required, depending on your settings
 
 Check [here](https://github.com/JonnyPtn/addo/releases) for the latest releases
 
