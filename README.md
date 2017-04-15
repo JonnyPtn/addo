@@ -1,6 +1,6 @@
 # addo
 
-[![Build status](https://img.shields.io/appveyor/ci/jonnyptn/addo.svg?label=build)](https://ci.appveyor.com/project/JonnyPtn/sfml-doom)
+[![Build status](https://img.shields.io/appveyor/ci/jonnyptn/addo.svg?label=build)](https://ci.appveyor.com/project/JonnyPtn/addo)
 
 ## Administrator do
 
