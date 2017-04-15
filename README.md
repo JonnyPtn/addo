@@ -1,9 +1,14 @@
 # addo
+
+[![Build status](https://img.shields.io/appveyor/ci/jonnyptn/addo.svg?label=build)](https://ci.appveyor.com/project/JonnyPtn/sfml-doom)
+
 ## Administrator do
 
 This is a program for windows which lets you run terminal commands in the current window with elevated permissions.
 
-UAC is still required, unfortunately. Example of it in action [here](https://www.youtube.com/watch?v=O0d89sDNk30)
+UAC is still required, depending on your settings
+
+Check [here](https://github.com/JonnyPtn/addo/releases) for the latest releases
 
 ## Compiling
 I've included the visual studio solution I used, but the thing is only one source file, so you should be able to work it out if you choose not to use visual studio. 
