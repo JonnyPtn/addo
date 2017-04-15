@@ -13,10 +13,13 @@ It's a single executable. so just put it somewhere in PATH so you can use it any
 
 ## Usage
 Whenever you want to **do** something as **ad**ministrator, presuming you've installed to a directory in your PATH, simply prepend addo:
+
 `> addo someCommandWhichProbablyBreaksStuff`
 
 Useful for installing projects generated via cmake (or otherwise)
+
 `> addo msbuild install.vcxproj`
+
 `> addo mingw-make install`
 
 Or whatever other crazy stuff you want to do
