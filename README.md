@@ -1,22 +1,22 @@
-# sudo
+# addo
+## Administrator do
 
-This is a program for windows which lets you run terminal commands in the current window with elevated permissions
+This is a program for windows which lets you run terminal commands in the current window with elevated permissions.
 
 UAC is still required, unfortunately. Example of it in action [here](https://www.youtube.com/watch?v=O0d89sDNk30)
 
-This is still experimental, so don't expect a bug free experience, and I welcome any feedback.
-
 ## Compiling
-The project uses cmake, so to build just make sure you have cmake and an msbuild version installed(I've tested with vs2015 and 2017).
-
-Generate the project files using cmake then build the generated project
+I've included the visual studio solution I used, but the thing is only one source file, so you should be able to work it out if you choose not to use visual studio. 
 
 ## Installing
-Build the "INSTALL" project in visual studio
+It's a single executable. so just put it somewhere in PATH so you can use it anywhere (personally I just bung it in system32, because i'm a loose cannon). If you use cli and need administrator permission to put it in the folder, my tool [here](https://github.com/JonnyPtn/sudo/) might help
 
-If you use the command line and want to place the files somewhere requiring administrator permissions check out my sudo program [here](https://github.com/JonnyPtn/sudo/)
+## Usage
+Whenever you want to **do** something as **ad**ministrator, presuming you've installed to a directory in your PATH, simply prepend addo:
+`> addo someCommandWhichProbablyBreaksStuff`
 
-command line install (presuming you have sudo installed)
-`cmake .` followed by `msbuild`
+Useful for installing projects generated via cmake (or otherwise)
+`> addo msbuild install.vcxproj`
+`> addo mingw-make install`
 
-Once installed, add the bin location to your PATH environment variable so you can call sudo from anywhere
+Or whatever other crazy stuff you want to do
