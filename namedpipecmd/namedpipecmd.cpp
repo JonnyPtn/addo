@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \file   PipedCmd.cpp.
+/// \file   namedpipecmd.cpp.
 ///
 /// \brief  This is the process which runs with elevated priviledges.
 ///         Basically just executes the command and pipes the output back to the sudo process
@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
     do
     {
         hpipe = CreateFile(
-            "\\\\.\\pipe\\sudopipe",
+            L"\\\\.\\pipe\\sudopipe",
             GENERIC_WRITE, // only need write access
             FILE_SHARE_READ | FILE_SHARE_WRITE,
             NULL,
@@ -48,10 +48,7 @@ int main(int argc, char* argv[])
 
     } while (hpipe == INVALID_HANDLE_VALUE);
 
-    DWORD dwRead, dwWritten;
-    HANDLE hStdin, hStdout;
-    BOOL bSuccess;
-
+    DWORD dwWritten;
         
     std::array<char, 128> buffer;
     std::shared_ptr<FILE> pipe(_popen(command.c_str(), "r"), _pclose);
@@ -64,7 +61,7 @@ int main(int argc, char* argv[])
             auto  wresult = WriteFile(
                 hpipe, // handle to our outbound pipe
                 buffer.data(), // data to send
-                buffer.size(), // length of data to send (bytes)
+                DWORD(buffer.size()), // length of data to send (bytes)
                 &dwWritten, // will store actual amount of data sent
                 NULL // not using overlapped IO
             );
