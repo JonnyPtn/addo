@@ -23,8 +23,6 @@ Whenever you want to **do** something as **ad**ministrator, presuming you've ins
 
 Useful for installing projects generated via cmake (or otherwise)
 
-`> addo msbuild install.vcxproj`
-
-`> addo mingw-make install`
+`> addo cmake --build . --target install`
 
 Or whatever other crazy stuff you want to do
